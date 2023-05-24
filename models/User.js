@@ -6,9 +6,10 @@ const userSchema = new Schema({
     email: {type: String, required: true, unique: true},
     phone: {type: String, required: true, unique: true},
     password: {type: String, required: true},
+    address: {type: String, required: true},
     host: {type: Boolean, default: false},
     Location: {type: String, required: true},
-    PreferedLocation: {type: String, required: true},
+    PreferredLocation: {type: String},
 
 }, {timestamps: true})
 

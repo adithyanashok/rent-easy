@@ -1,4 +1,4 @@
-import User from "../models/user.js";
+import User from "../models/User.js";
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken";
 import { createError } from "../error.js";
@@ -56,7 +56,7 @@ export const Login = async (req, res, next) => {
 }
 export const logout = async (req, res) => {
     res
-      .clearCookie("accessToken", {
+      .clearCookie("access_token", {
         sameSite: "none",
         secure: true,
       })

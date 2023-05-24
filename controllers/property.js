@@ -26,6 +26,19 @@ export const FetchPosts = async (req, res, next) => {
     }
 }
 
+// Fetch post of a user
+
+export const FetchUserPosts = async (req, res, next) => {
+    console.log(req.user)
+    try {
+        const post = await Property.find({userId: req.params.id})
+        res.status(200).json(post)
+    } catch (err) {
+        console.log(err)
+
+    }
+}
+
 // Fetching single post
 
 export const FetchPost = async (req, res, next) => {

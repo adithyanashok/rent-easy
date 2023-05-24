@@ -15,6 +15,7 @@ const propertySchema = new Schema({
     OwnerName: {type: String, required: true},
     OwnerPhone: {type: String, required: true},
     OwnerEmail: {type: String, required: true},
+    payment_intent: {type :String},
     Image1: {type: String},
     Image2: {type: String},
     Image3: {type: String},
