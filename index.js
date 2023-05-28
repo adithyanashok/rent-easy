@@ -9,6 +9,7 @@ import bookingnRouter from './routes/booking.js'
 import cors from "cors"
 import multer from "multer";
 import path from "path";
+import Razorpay from "razorpay";
 
 const app = express()
 const __dirname = path.resolve();
@@ -38,21 +39,21 @@ app.put("/api/upload", upload.array("file"), (req, res) => {
     res.status(200).json("File has been uploaded");
 });
 // Middlewares
-
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Credentials", true);
     next();
 });
 app.use(cookieParser())
 app.use(cors({
-    origin:
+    origin: [
         'http://localhost:3000',
-
-    credentials: true,
+        'http://localhost:3000/success'],
+        credentials: true
 }));
 dotenv.config()
 app.use(express.json())
-
+app.use(express.json({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRouter)
 app.use("/api", postRouter)
@@ -67,6 +68,10 @@ const mongoConnection = () => {
     })
 }
 
+export const instance = new Razorpay({
+    key_id: process.env.KEY_ID,
+    key_secret: process.env.KEY_SECRET,
+});
 
 // Error handling
 app.use((err, req, res, next) => {
