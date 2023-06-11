@@ -78,22 +78,22 @@ export const DeletePost = async (req, res, next) => {
 
     }
 }
-// Update Post
+// Update Property
 
-export const UpdatePost = async (req, res, next) => {
+export const UpdateProperty = async (req, res, next) => {
     try {
         if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
             // Yes, it's a valid ObjectId, proceed with `findById` call.
-            const post = await Property.findById(req.params.id)
+            const property = await Property.findById(req.params.id)
 
-            if (!post) return next(createError(404, "Post Not found"))
+            if (!property) return next(createError(404, "Post Not found"))
 
-            if (req.user.id === post.userId) {
+            if (req.user.id === property.userId) {
 
-                const updatedPost = await Property.findByIdAndUpdate(req.params.id, {
+                const updatedproperty = await Property.findByIdAndUpdate(req.params.id, {
                     $set: req.body
                 }, { new: true })
-                res.status(200).json(updatedPost)
+                res.status(200).json(updatedproperty)
             } else {
                 return next(createError(404, "This is not your video to update"))
             }

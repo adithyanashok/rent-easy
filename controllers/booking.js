@@ -78,7 +78,6 @@ export const RazorpayInt = async (req, res) => {
     OwnerName: property.OwnerName,
     OwnerPhone: property.OwnerPhone,
     OwnerEmail: property.OwnerEmail,
-    isCompleted: true,
     Image1: property.Image1,
     Image2: property.Image2,
     Image3: property.Image3,
@@ -86,7 +85,16 @@ export const RazorpayInt = async (req, res) => {
   });
 
   await newBooking.save()
-
+  const orders = await Property.findOneAndUpdate(
+    {
+      _id: req.params.id,
+    },
+    {
+      $set: {
+        isCompleted: true,
+      },
+    }
+  );
 }
 
 export const verifyPayment = async (req, res) => {
@@ -106,7 +114,28 @@ export const verifyPayment = async (req, res) => {
       // Database 
       const payment = await Payment({ razorpay_order_id, razorpay_payment_id, razorpay_signature })
       await payment.save()
-      
+      const orders = await Booking.findOneAndUpdate(
+        {
+          payment_intent: razorpay_order_id,
+        },
+        {
+          $set: {
+            isCompleted: true,
+          },
+        }
+      );
+      const changeOrder = await Property.findOneAndUpdate(
+        {
+          payment_intent: razorpay_order_id,
+        },
+        {
+          $set: {
+            isCompleted: true,
+          },
+        }
+      );
+  
+      res.status(200).send("Order has been confirmed.");
     } else {
       res.status(400).json({
         success: false,

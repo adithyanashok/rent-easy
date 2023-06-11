@@ -1,5 +1,4 @@
 import express from "express";
-import user from './routes/user.js'
 import cookieParser from 'cookie-parser'
 import mongoose from "mongoose";
 import dotenv from 'dotenv'
@@ -9,16 +8,16 @@ import bookingnRouter from './routes/booking.js'
 import chatRouter from './routes/chat.js'
 import messageRouter from "./routes/message.js";
 import userRouter from "./routes/user.js";
-
 import cors from "cors"
 import multer from "multer";
 import path from "path";
 import Razorpay from "razorpay";
-
+import session from 'express-session'
 const app = express()
 const __dirname = path.resolve();
 
 app.use("/images", express.static(path.join(__dirname, "/images")))
+
 
 
 // File upload
@@ -37,19 +36,21 @@ app.post("/api/upload", upload.array("file"), (req, res) => {
     res.status(200).json("File has been uploaded");
 });
 
-app.post("/api/upload2", upload.array("file"), (req, res) => {
-    res.status(200).json("File has been uploaded");
-});
-
-app.post("/api/upload3", upload.array("file"), (req, res) => {
-    res.status(200).json("File has been uploaded");
-});
-
 app.put("/api/upload", upload.array("file"), (req, res) => {
     res.status(200).json("File has been uploaded");
 });
 
+app.post("/user/upload", upload.single("file"), (req, res) => {
+    res.status(200).json("File has been uploaded");
+}); // File upload end
+
 // Middlewares
+
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false
+  }));
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Credentials", true);
@@ -60,17 +61,14 @@ app.use(cookieParser())
 
 app.use(cors({
     origin: [
-        'http://localhost:3000',
-        'http://localhost:3000/success'],
+        'http://localhost:3000'],
         credentials: true
 }));
 
 dotenv.config()
 
 app.use(express.json())
-
 app.use(express.json({ extended: false }));
-
 app.use(express.urlencoded({ extended: true }));
 
 
@@ -111,9 +109,10 @@ app.use((err, req, res, next) => {
 
 })
 
+
 const PORT = process.env.PORT || 5000
 
 app.listen(PORT, () => {
-    console.log("Port Running")
+    console.log(`Port Running on ${PORT}`)
     mongoConnection()
 })

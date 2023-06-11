@@ -2,14 +2,15 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    name: {type: String, required: true},
-    email: {type: String, required: true, unique: true},
-    phone: {type: String, required: true, unique: true},
-    password: {type: String, required: true},
-    address: {type: String, required: true},
+    name: {type: String, },
+    email: {type: String, unique: true},
+    phone: {type: String, unique: true},
+    password: {type: String, },
+    address: {type: String, },
     host: {type: Boolean, default: false},
-    Location: {type: String, required: true},
-    PreferredLocation: {type: String},
+    profile: {type: String},
+    state: {type: String},
+    city: {type: String},
 
 }, {timestamps: true})
 
